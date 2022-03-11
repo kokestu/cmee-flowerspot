@@ -3,16 +3,9 @@ Model to identify mature flowers from immature and other plant foliage
 
 ## How to use the scraper
 
-To get the image thumbnail links from a category:
-
 ```
-cd code
-bash get-img-uri.sh <category-url>
+python3 scrape.py <category-url> <label>
 ```
 
-To fetch the images:
-
-```
-[ -d ../data/img ] || mkdir ../data/img   # make sure there is a dir
-python3 scrape.py ../data/links.txt
-```
+This will recursively fetch all the image thumbnails from the category (all pages) and store them in
+`data/img/label`.

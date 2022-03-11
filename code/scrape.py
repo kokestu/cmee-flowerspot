@@ -2,14 +2,13 @@
 import requests
 from typing import List
 import logging as log
+import os.path
 
-
-def download_image(filename: str, uri: str) -> str:
-    import os.path
+def download_image(filename: str, uri: str, location: str) -> str:
     # Build filename with extension
     ext = uri.split('.')[-1]
     with_ext = f'{filename}.{ext}'
-    path = '../data/img/' + with_ext
+    path = location + with_ext
     if not os.path.exists(path):
         # Wikimedia requires descriptive headers
         log.info(f'Downloading image for {filename}...')
@@ -24,14 +23,32 @@ def download_image(filename: str, uri: str) -> str:
     return with_ext 
 
 def main(argv: List[str]):
-    if len(argv) != 2:
-        raise RuntimeError("Input file of links required!")
-    with open(argv[1], 'r') as f1:
+    import subprocess
+
+    # Get arguments
+    if len(argv) != 3:
+        raise RuntimeError("Category URL and label type required!")
+    category = argv[1]
+    label = argv[2]
+
+    # Get image links
+    subprocess.Popen(
+        f"bash get-img-uri.sh {category}", shell=True
+    ).wait()
+
+    # Read image links
+    with open('../data/links.txt', 'r') as f1:
         links = f1.read().splitlines()
 
+    # Create appropriate directory
+    dirpath = f'../data/img/{label}/'
+    if not os.path.isdir(dirpath):
+        os.makedirs(dirpath, exist_ok=True)
+
+    # Download images
     for i, uri in enumerate(links):
         log.info(f'Downloading image {i}...')
-        download_image(f'img{i}', uri)
+        download_image(f'img{i}', uri, dirpath)
         
 
 if __name__ == "__main__":
