@@ -3,10 +3,7 @@
 #require(keras)
 #install_keras()
 library(tfdatasets)
-
-
 ## Load image data from directory
-
 img_data <- image_dataset_from_directory(directory="../data/img", seed= 123, validation_split=0.4, subset="training")
 test_data <-image_dataset_from_directory(directory="../data/img", seed= 123, validation_split=0.4, subset="validation")
 
@@ -55,11 +52,16 @@ model <- keras_model_sequential() %>%
           loss="sparse_categorical_crossentropy",
           metrics=c('accuracy'))
 
-set.seed(888)
 model %>% fit(prepare_data(img_data, batch_size=32, shuffle_buffer_size=1000),
-              epochs=5,
+             epochs=5,
               verbose=2)
 
 
 # Evaluate model
 model %>% evaluate(prepare_data(test_data, batch_size=32, shuffle_buffer_size=1000))
+
+
+fall_back <- function() {
+  load("fall_back_model.RDA")
+  model_good %>% evaluate(prepare_data(test_data, batch_size=32, shuffle_buffer_size=1000))
+}
