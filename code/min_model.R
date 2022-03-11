@@ -1,10 +1,14 @@
+
+# Imports
+require(keras)
+install_keras()
+library(tfdatasets)
+
+
 ## Load image data from directory
 
-get_tfdataset <- function(filename){
-  # takes structured directory and uploads images to tfdataset
-img_data <- image_dataset_from_directory(filename)
-return(img_data)
-}
+img_data <- image_dataset_from_directory(directory="../data/min_model_training")
+
 
 # Prepare tf dataset image for model
 prepare_data <- function(data_set, batch_size, shuffle_buffer_size){
@@ -14,7 +18,7 @@ prepare_data <- function(data_set, batch_size, shuffle_buffer_size){
   }
   
   # prefeth lets dataset fetch batches in the background while the model is training
-  data_set %>% dataset_batch(batch_size) %>% dataset_prefetch(buffer_size=tf$data$experimental$AUTOTUNE)
+  #data_set %>% dataset_batch(batch_size) %>% dataset_prefetch(buffer_size=tf$data$experimental$AUTOTUNE)
   
 }
 
@@ -27,15 +31,15 @@ show_data <- function(data=img_data){
 # Define + compile model
 
 model <- keras_model_sequential() %>%
-  layer_cropping_2d(cropping=list(50,50)) %>%
+ # layer_cropping_2d(cropping=list(50,50)) %>%
   layer_conv_2d(filters=10,
-                kernel_size=c(5,5), 
+                kernel_size=c(3,3), 
                 activation="relu",
-                input_shape = c(50,50, 3)) %>%
+                input_shape = c(256, 256, 3)) %>%
   layer_max_pooling_2d(pool_size=c(2,2)) %>%
   layer_flatten() %>%
   layer_dense(units=20, activation = "relu") %>%
-  layer_dense(units=10, activation="softmax") %>%
+  layer_dense(units=2, activation="softmax") %>%
   
   compile(optimizer="adam",
           loss="sparse_categorical_crossentropy",
