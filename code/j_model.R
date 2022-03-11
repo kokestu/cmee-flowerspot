@@ -94,7 +94,7 @@ model <- keras_model_sequential() %>%
 # And compile it
 model %>% 
   compile(
-    loss = "mean_absolute_error",
+    loss = "categorical_crossentropy",
     optimizer = "adam",
     metrics = "accuracy"
   ) 
