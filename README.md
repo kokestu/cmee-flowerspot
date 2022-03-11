@@ -16,5 +16,5 @@ To get the data we're using, run (from code directory):
 python3 scrape.py https://commons.wikimedia.org/wiki/Category:Close-up_photographs_of_flowers pos
 python3 scrape.py https://commons.wikimedia.org/wiki/Category:Close-up_photographs_of_flower_buds neg
 python3 scrape.py https://commons.wikimedia.org/wiki/Category:Close-up_photographs_of_leaves leaves
-mv ../data/img/leaves/* ../data/img/pos
+mv ../data/img/leaves/* ../data/img/neg
 ```
