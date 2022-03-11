@@ -18,15 +18,8 @@ prepare_data <- function(data_set, batch_size, shuffle_buffer_size){
     data_set <- data_set %>% dataset_shuffle(shuffle_buffer_size)
   } }
   
-  # prefeth lets dataset fetch batches in the background while the model is training
-  #data_set %>% dataset_batch(batch_size) %>% dataset_prefetch(buffer_size=tf$data$experimental$AUTOTUNE)
-  
-
 
 ## TESTING
-
-
-
 
 show_data <- function(data=img_data){
   test <- data %>% 
@@ -62,6 +55,7 @@ model <- keras_model_sequential() %>%
           loss="sparse_categorical_crossentropy",
           metrics=c('accuracy'))
 
+set.seed(888)
 model %>% fit(prepare_data(img_data, batch_size=32, shuffle_buffer_size=1000),
               epochs=5,
               verbose=2)
