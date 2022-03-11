@@ -48,7 +48,7 @@ def main(argv: List[str]):
     # Download images
     for i, uri in enumerate(links):
         log.info(f'Downloading image {i}...')
-        download_image(f'img{i}', uri, dirpath)
+        download_image(f'img{i}-{label}', uri, dirpath)
         
 
 if __name__ == "__main__":
